@@ -163,8 +163,8 @@ export class Environment {
 				Memory: 1024 * 1024 * 1024,
 				MemorySwap: 1024 * 1024 * 1024,
 				Tmpfs: {
-					"/workspace": "rw,exec,nosuid,size=1G",
-					"/tmp": "rw,exec,nosuid,size=1G",
+					"/workspace": "rw,exec,nodev,nosuid,size=1G",
+					"/tmp": "rw,exec,nodev,nosuid,size=1G",
 				},
 				Binds: opt.restore ? [`${opt.restore}:/tmp/_workspace.tar:ro`] : [],
 				AutoRemove: true,

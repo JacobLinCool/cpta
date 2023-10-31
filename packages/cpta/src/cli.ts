@@ -33,11 +33,11 @@ program
 		const failed = await make_all(options.workspace);
 
 		if (failed.size > 0) {
-			console.error("Failed to build the following workspaces:");
+			console.log("=".repeat(80));
+			console.log("Failed to build the following workspaces:");
 			for (const [dir, err] of failed) {
-				console.error(dir);
-				console.group();
-				console.error(err);
+				console.group(dir);
+				console.log(err);
 				console.groupEnd();
 			}
 		}
