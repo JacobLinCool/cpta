@@ -27,10 +27,12 @@ program
 	.command("make")
 	.description("build all workspaces")
 	.option("-w, --workspace [workspaces-dir]", "Workspace directory", "./.works")
+	.option("-b, --build [build-dir]", "Build config directory", "./.build")
 	.action(async (options) => {
 		console.log("Building all workspaces in:", options.workspace);
+		console.log("Build config directory:", options.build);
 
-		const failed = await make_all(options.workspace);
+		const failed = await make_all(options.workspace, options.build);
 
 		if (failed.size > 0) {
 			console.log("=".repeat(80));

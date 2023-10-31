@@ -5,7 +5,10 @@ import { DEFAULT_IMAGE } from "./constants";
 import { Environment } from "./environment";
 import { Workspace } from "./types";
 
-export async function make_all(workspaces: string): Promise<Map<string, string>> {
+export async function make_all(
+	workspaces: string,
+	build_config: string,
+): Promise<Map<string, string>> {
 	const failed = new Map<string, string>();
 
 	const dirs = fs
@@ -15,7 +18,7 @@ export async function make_all(workspaces: string): Promise<Map<string, string>>
 		const dir = dirs[i];
 		const workspace = { dir: path.resolve(workspaces, dir.name) };
 		try {
-			await make(workspace);
+			await make(workspace, build_config);
 		} catch (e) {
 			console.error(e);
 			if (e instanceof Error) {
@@ -29,15 +32,20 @@ export async function make_all(workspaces: string): Promise<Map<string, string>>
 	return failed;
 }
 
-export async function make(workspace: Workspace): Promise<void> {
+export async function make(workspace: Workspace, build_config: string): Promise<void> {
 	const raw_dir = path.join(workspace.dir, "0-raw");
 	if (!fs.existsSync(raw_dir)) {
 		throw new Error(`No raw directory found in ${workspace.dir}`);
 	}
 
+	const restores = [raw_dir];
+	if (build_config && fs.existsSync(path.join(build_config, "mount"))) {
+		restores.push(path.join(build_config, "mount"));
+	}
+
 	const docker = new Dockerode();
 	const env = await Environment.create(docker, DEFAULT_IMAGE, {
-		restore: raw_dir,
+		restore: restores,
 	});
 
 	try {
