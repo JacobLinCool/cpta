@@ -2,6 +2,27 @@
 
 TA Kit for Computer Programming.
 
+## File Structure
+
+```sh
+.
+├── .works
+|   └── <student-id>
+|       ├── 0-raw
+|       ├── 1-build
+|       ├── 2-output
+|       └── 3-result
+├-- .build
+|   └── mount
+|       └ ... (files to be mounted before build)
+└── .cases
+    └── <case-name>
+        ├── mount
+        |   └ ... (files to be mounted before execution)
+        ├── exec.js
+        └── spec.js
+```
+
 ## Usage
 
 ### Create workspace from Moodle archive
@@ -23,20 +44,20 @@ cpta make --workspace [workspaces-dir]
 ### Execute all targets in workspaces
 
 ```sh
-cpta exec --workspace [workspaces-dir] --input [input-dir]
+cpta exec --workspace [workspaces-dir] --case [cases-dir]
 ```
 
 `workspaces-dir` defaults to `./.works`.
-`input-dir` defaults to `./.inputs`.
+`cases-dir` defaults to `./.cases`.
 
 ### Evaluate all targets in workspaces
 
 ```sh
-cpta eval --workspace [workspaces-dir] --spec [spec-dir]
+cpta eval --workspace [workspaces-dir] --case [cases-dir]
 ```
 
 `workspaces-dir` defaults to `./.works`.
-`spec-dir` defaults to `./.specs`.
+`cases-dir` defaults to `./.cases`.
 
 ### Make report from workspaces
 

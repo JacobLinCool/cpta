@@ -2,6 +2,8 @@ import { Command } from "commander";
 import fs from "node:fs";
 import { $ } from "zx";
 import { DEFAULT_IMAGE } from "./constants";
+import { eval_all } from "./eval";
+import { exec_all } from "./exec";
 import { from_moodle } from "./ext/from-moodle";
 import { make_all } from "./make";
 import { pkg } from "./pkg";
@@ -49,22 +51,34 @@ program
 	.command("exec")
 	.description("execute all targets in the workspaces")
 	.option("-w, --workspace [workspaces-dir]", "Workspace directory", "./.works")
-	.option("-i, --input [input-dir]", "Input directory", "./.inputs")
-	.action((options) => {
+	.option("-c, --case [cases-dir]", "Case directory", "./.cases")
+	.action(async (options) => {
 		console.log("Executing all targets in:", options.workspace);
-		console.log("Input directory:", options.input);
-		throw new Error("Not implemented");
+		console.log("Case directory:", options.case);
+		await exec_all(options.workspace, options.case);
 	});
 
 program
 	.command("eval")
 	.description("evaluate all targets in the workspaces according to specifications")
 	.option("-w, --workspace [workspaces-dir]", "Workspace directory", "./.works")
-	.option("-s, --spec [spec-dir]", "Specification directory", "./.specs")
-	.action((options) => {
+	.option("-c, --case [cases-dir]", "Case directory", "./.cases")
+	.action(async (options) => {
 		console.log("Evaluating all targets in:", options.workspace);
-		console.log("Specification directory:", options.spec);
-		throw new Error("Not implemented");
+		console.log("Case directory:", options.case);
+		const result = await eval_all(options.workspace, options.case);
+		console.log("=".repeat(80));
+		console.log("Failed cases:");
+		for (const [workspace, cases] of result) {
+			console.group(workspace);
+			for (const [c, [passed, detail]] of cases) {
+				if (!passed) {
+					console.log(c);
+					console.log(detail);
+				}
+			}
+			console.groupEnd();
+		}
 	});
 
 program

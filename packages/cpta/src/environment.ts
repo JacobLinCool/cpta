@@ -90,16 +90,27 @@ export class Environment {
 	 */
 	public async exec(
 		cmd: string[],
+		stdin?: string,
 	): Promise<[exit: Promise<number | null>, stdout: WritableStream, stderr: WritableStream]> {
+		log("exec", cmd);
 		const exec = await this.container.exec({
 			Cmd: cmd,
 			AttachStdout: true,
 			AttachStderr: true,
+			AttachStdin: stdin ? true : false,
 		});
 
-		const duplex = await exec.start({});
+		const duplex = await exec.start({
+			stdin: stdin ? true : false,
+			hijack: true,
+		});
 		const stdout = new WritableStream();
 		const stderr = new WritableStream();
+
+		if (stdin) {
+			duplex.write(stdin);
+			duplex.end();
+		}
 
 		this.docker.modem.demuxStream(duplex, stdout, stderr);
 
@@ -178,7 +189,7 @@ export class Environment {
 			Cmd: ["/bin/bash", "-c", "while true; do sleep 10; done"],
 			Hostname: "cp",
 			WorkingDir: "/workspace",
-			StopTimeout: 600,
+			StopTimeout: 60,
 		});
 		log("created container", container.id);
 
