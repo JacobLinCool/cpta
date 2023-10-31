@@ -6,7 +6,8 @@
 	"license": "AGPL-3.0",
 	"keywords": [],
 	"type": "module",
-	"types": "./dist/index.d.ts",
+	"types": "./dist/lib.d.ts",
+	"main": "./dist/index.js",
 	"bin": {
 		"cpta": "./dist/index.js"
 	},
@@ -31,6 +32,7 @@
 		"@types/debug": "^4.1.10",
 		"@types/dockerode": "^3.3.21",
 		"@types/tar": "^6.1.7",
+		"cpta": "workspace:^",
 		"tsup": "^7.2.0",
 		"typedoc": "^0.25.2",
 		"typescript": "^5.2.2"
