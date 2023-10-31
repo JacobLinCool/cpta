@@ -12,7 +12,7 @@ export interface EnvironmentOptions {
 	/**
 	 * Restore workspace from a tarball or directory on host
 	 */
-	restore?: string;
+	restore?: string | string[];
 }
 
 export class Environment {
@@ -37,8 +37,8 @@ export class Environment {
 	 */
 	async copy(src: string, dest: string): Promise<void> {
 		const stream = tar.create({}, [src]);
-
 		log({ stream });
+
 		const res = await this.container.putArchive(stream, {
 			path: path.resolve("/workspace", dest),
 		});
@@ -135,12 +135,18 @@ export class Environment {
 		image: string,
 		opt: EnvironmentOptions = {},
 	): Promise<Environment> {
-		if (opt.restore) {
-			if (!fs.existsSync(opt.restore)) {
-				throw new Error(`Restore path ${opt.restore} does not exist`);
+		const restores = Array.isArray(opt.restore)
+			? opt.restore
+			: typeof opt.restore === "string"
+			? [opt.restore]
+			: [];
+		for (let i = 0; i < restores.length; i++) {
+			const restore = restores[i];
+			if (!fs.existsSync(restore)) {
+				throw new Error(`Restore path ${restore} does not exist`);
 			}
 
-			const stat = fs.statSync(opt.restore);
+			const stat = fs.statSync(restore);
 
 			if (stat.isDirectory()) {
 				// create a temporary tarball
@@ -148,8 +154,8 @@ export class Environment {
 					os.tmpdir(),
 					`cpta-${Date.now()}-${Math.random().toString(36).slice(2)}.tar`,
 				);
-				await tar.create({ file: tmp, cwd: opt.restore }, ["."]);
-				opt.restore = tmp;
+				await tar.create({ file: tmp, cwd: restore }, ["."]);
+				restores[i] = tmp;
 			}
 		}
 
@@ -166,7 +172,7 @@ export class Environment {
 					"/workspace": "rw,exec,nodev,nosuid,size=1G",
 					"/tmp": "rw,exec,nodev,nosuid,size=1G",
 				},
-				Binds: opt.restore ? [`${opt.restore}:/tmp/_workspace.tar:ro`] : [],
+				Binds: restores.map((restore, i) => `${restore}:/tmp/_workspace/${i}.tar:ro`),
 				AutoRemove: true,
 			},
 			Cmd: ["/bin/bash", "-c", "while true; do sleep 10; done"],
@@ -179,16 +185,16 @@ export class Environment {
 		await container.start();
 		log("started container", container.id);
 
-		if (opt.restore) {
+		for (let i = 0; i < restores.length; i++) {
 			const exec = await container.exec({
-				Cmd: ["tar", "xf", "/tmp/_workspace.tar", "-C", "/workspace"],
+				Cmd: ["tar", "xf", `/tmp/_workspace/${i}.tar`, "-C", "/workspace"],
 			});
 
 			const duplex = await exec.start({});
 			for await (const chunk of duplex) {
 				// nothing, just consume the stream
 			}
-			log("restored workspace", container.id);
+			log("restored workspace", i, container.id, restores[i]);
 		}
 
 		return new Environment(docker, container.id);
