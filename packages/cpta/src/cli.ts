@@ -1,5 +1,6 @@
 import { Command } from "commander";
 import fs from "node:fs";
+import * as XLSX from "xlsx";
 import { $ } from "zx";
 import { DEFAULT_IMAGE } from "./constants";
 import { eval_all } from "./eval";
@@ -7,6 +8,7 @@ import { exec_all } from "./exec";
 import { from_moodle } from "./ext/from-moodle";
 import { make_all } from "./make";
 import { pkg } from "./pkg";
+import { generate_report } from "./report";
 
 const program = new Command(pkg.name).version(pkg.version).description(pkg.description);
 
@@ -83,10 +85,20 @@ program
 
 program
 	.command("report")
+	.argument("[students]", "Student list file", "./students.csv")
+	.option("-w, --workspace [workspaces-dir]", "Workspace directory", "./.works")
+	.option("-o, --output [output-file]", "Output file", "./report.xlsx")
 	.description("generate a report from the workspaces")
-	.action(() => {
+	.action(async (csv, options) => {
 		console.log("Making report from workspaces");
-		throw new Error("Not implemented");
+
+		const students = fs
+			.readFileSync(csv, "utf-8")
+			.split("\n")
+			.map((line) => line.split(",")[0].trim());
+		const report = await generate_report(students, options.workspace);
+
+		XLSX.writeFile(report, options.output);
 	});
 
 program
