@@ -15,5 +15,6 @@ export default defineConfig(() => ({
 		const src = path.join("dist", "postinstall.js");
 		const dest = path.join("scripts", "postinstall.js");
 		fs.copyFileSync(src, dest);
+		fs.chmodSync(dest, 0o755);
 	},
 }));
