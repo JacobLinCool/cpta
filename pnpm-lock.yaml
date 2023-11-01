@@ -86,9 +86,6 @@ importers:
             "@types/tar":
                 specifier: ^6.1.7
                 version: 6.1.7
-            cpta:
-                specifier: workspace:^
-                version: "link:"
             tsup:
                 specifier: ^7.2.0
                 version: 7.2.0(typescript@5.2.2)
