@@ -2,6 +2,23 @@
 
 TA Kit for Computer Programming.
 
+## Features
+
+- [x] Compile and Run code in sandbox
+  - [x] Network isolation (no internet access)
+  - [x] Limit CPU usage (1 core)
+  - [x] Limit memory usage (1GB)
+  - [x] Limit disk usage (`/tmp` and `/workspace`)
+  - [x] Read-only root filesystem, write to `/tmp` and `/workspace` only
+- [x] Mount files into workspace
+  - [x] Mount files before build
+  - [x] Mount files before execution
+- [x] Flexible file-based case system
+  - [x] Config `exec.js` to execute target
+  - [x] Define `spec.js` to evaluate result
+- [x] Generate report from results
+  - [x] Generate spreadsheet report with `students.csv`
+
 ## File Structure
 
 ```sh
