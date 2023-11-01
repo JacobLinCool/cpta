@@ -12,11 +12,13 @@
 		"cpta": "./dist/index.js"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"scripts"
 	],
 	"scripts": {
 		"build": "tsup",
-		"build:docs": "typedoc --out docs src"
+		"build:docs": "typedoc --out docs src",
+		"postinstall": "./scripts/postinstall.js"
 	},
 	"dependencies": {
 		"chalk": "^5.3.0",
