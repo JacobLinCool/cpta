@@ -1,0 +1,5 @@
+!.cases/
+!.works
+.works/*/1-build/
+.works/*/2-output/
+.works/*/3-result/
