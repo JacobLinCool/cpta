@@ -3,7 +3,7 @@ export interface Workspace {
 }
 
 export type ExecSpec = [command: string[], stdin: string][];
-export type EvalSpec = (stdout: string, stderr: string) => void | Promise<void>;
+export type EvalSpec = "interactive" | ((stdout: string, stderr: string) => void | Promise<void>);
 
 export interface Case {
 	name: string;

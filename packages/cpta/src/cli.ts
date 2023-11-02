@@ -95,7 +95,8 @@ program
 		const students = fs
 			.readFileSync(csv, "utf-8")
 			.split("\n")
-			.map((line) => line.split(",")[0].trim());
+			.map((line) => line.split(",")[0].trim())
+			.filter((line) => line.length > 0);
 		const report = await generate_report(students, options.workspace);
 
 		XLSX.writeFile(report, options.output);

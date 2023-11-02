@@ -70,8 +70,44 @@ async function eval_case(
 		const stdout = fs.readFileSync(path.join(out_dir, "stdout.log"), "utf-8");
 		const stderr = fs.readFileSync(path.join(out_dir, "stderr.log"), "utf-8");
 
-		await c.eval(stdout, stderr);
-		return [true, ""];
+		if (c.eval === "interactive") {
+			console.log("=".repeat(80));
+			console.log(`${path.basename(workspace.dir)}: ${c.name}`);
+			console.log("-".repeat(80));
+			console.log(stdout);
+			console.log("-".repeat(80));
+			console.log(`Press 'p' to pass, 'f' to fail.`);
+			process.stdin.resume();
+			process.stdin.setRawMode(true);
+			const result = await new Promise<[boolean, string]>((resolve) => {
+				process.stdin.on("data", (chunk) => {
+					const char = chunk.toString();
+					if (char === "p" || char === "P") {
+						resolve([true, ""]);
+					} else if (char === "f" || char === "F") {
+						resolve([false, ""]);
+					}
+				});
+			});
+			process.stdin.setRawMode(false);
+			process.stdin.pause();
+
+			if (result[0] === false) {
+				console.log("Write the reason why it failed, then press enter.");
+				process.stdin.resume();
+				result[1] = await new Promise<string>((resolve) => {
+					process.stdin.on("data", (chunk) => {
+						resolve(chunk.toString());
+					});
+				});
+				process.stdin.pause();
+			}
+
+			return result;
+		} else {
+			await c.eval(stdout, stderr);
+			return [true, ""];
+		}
 	} catch (err) {
 		if (err instanceof Error) {
 			return [false, err.message.trim()];
