@@ -1,4 +1,4 @@
-export interface Workspace {
+export interface IWorkspace {
 	dir: string;
 }
 

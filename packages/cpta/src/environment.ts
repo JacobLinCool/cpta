@@ -51,9 +51,9 @@ export class Environment {
 	/**
 	 * Pack the whole workspace into a tarball
 	 * @param dest the destination of the tarball (on host)
-	 * @param unpacked whether to unpack the tarball instead of storing it
+	 * @param unpack whether to unpack the tarball instead of storing it
 	 */
-	public async store(dest: string, unpacked = false): Promise<void> {
+	public async store(dest: string, unpack = false): Promise<void> {
 		const [exit, tarball, stderr] = await this.exec([
 			"tar",
 			"-C",
@@ -65,7 +65,7 @@ export class Environment {
 		log("tar exit", (await exit) ? "success" : stderr.toString());
 		const buffer = tarball.toBuffer();
 
-		if (!unpacked) {
+		if (!unpack) {
 			fs.writeFileSync(dest, buffer);
 		} else {
 			const tmp = path.join(
