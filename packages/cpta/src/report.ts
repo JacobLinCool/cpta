@@ -8,7 +8,8 @@ export async function generate_report(
 ): Promise<XLSX.WorkBook> {
 	const dirs = fs
 		.readdirSync(workspaces, { withFileTypes: true })
-		.filter((dir) => dir.isDirectory() && !dir.name.startsWith("."));
+		.filter((dir) => dir.isDirectory() && !dir.name.startsWith("."))
+		.map((dir) => ({ name: dir.name, normalized: dir.name.toLowerCase() }));
 
 	const wb = XLSX.utils.book_new();
 	const ws = XLSX.utils.aoa_to_sheet([["Student", "Score", "Message"]]);
@@ -16,7 +17,7 @@ export async function generate_report(
 
 	for (const student of students) {
 		try {
-			const dir = dirs.find((dir) => dir.name.includes(student));
+			const dir = dirs.find((dir) => dir.normalized.includes(student.toLowerCase()));
 			if (!dir) {
 				throw new Error();
 			}
@@ -33,12 +34,12 @@ export async function generate_report(
 				),
 			);
 
-			const score = result.reduce((acc, [id, [passed, detail]]) => {
+			const score = result.reduce((acc, [id, [passed]]) => {
 				return acc + (passed ? 1 : 0);
 			}, 0);
 
-			const passed = result.filter(([id, [passed, detail]]) => passed);
-			const failed = result.filter(([id, [passed, detail]]) => !passed);
+			const passed = result.filter(([id, [passed]]) => passed);
+			const failed = result.filter(([id, [passed]]) => !passed);
 
 			const message = `passed: ${
 				passed.length ? passed.map((p) => p[0]).join(", ") : "none"

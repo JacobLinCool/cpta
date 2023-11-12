@@ -107,7 +107,7 @@ function try_hoist(dir: string) {
  */
 async function cleanup(contents: string[]) {
 	for (const content of contents) {
-		const files = fs.readdirSync(content);
+		const files = fs.readdirSync(content).filter((file) => !file.startsWith("."));
 		for (const file of files) {
 			const fp = path.resolve(content, file);
 			if (fs.statSync(fp).isFile()) {
