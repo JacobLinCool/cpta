@@ -189,7 +189,7 @@ export class Environment {
 			Cmd: ["/bin/bash", "-c", "while true; do sleep 10; done"],
 			Hostname: "cp",
 			WorkingDir: "/workspace",
-			StopTimeout: 60,
+			StopTimeout: 10,
 		});
 		log("created container", container.id);
 

@@ -19,12 +19,12 @@ export async function case_from_dir(case_dir: string): Promise<Case> {
 
 export async function get_cases(cases_dir: string): Promise<Map<string, Case>> {
 	const cases = new Map<string, Case>();
-	const dirs = fs.readdirSync(cases_dir, { withFileTypes: true });
+	const dirs = fs
+		.readdirSync(cases_dir, { withFileTypes: true })
+		.filter((d) => d.isDirectory() && !d.name.startsWith(".") && !d.name.startsWith("_"));
 	for (const dir of dirs) {
-		if (dir.isDirectory()) {
-			const c = await case_from_dir(path.join(cases_dir, dir.name));
-			cases.set(c.name, c);
-		}
+		const c = await case_from_dir(path.join(cases_dir, dir.name));
+		cases.set(c.name, c);
 	}
 	return cases;
 }
