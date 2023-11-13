@@ -1,5 +1,21 @@
 # cpta
 
+## 0.1.0
+
+### Minor Changes
+
+-   [`e1336b6`](https://github.com/JacobLinCool/cpta/commit/e1336b6903c92b264589a5e0312cee33b22a6a84) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Major change on API, now the Worksapce class handles the whole process
+
+### Patch Changes
+
+-   [`60b238e`](https://github.com/JacobLinCool/cpta/commit/60b238e9c7a532b392243df1a92519064bc09c82) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - ignore '.' prefix file on cleaning up
+
+-   [`e1336b6`](https://github.com/JacobLinCool/cpta/commit/e1336b6903c92b264589a5e0312cee33b22a6a84) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Add workspace filter
+
+-   [`8d0aa52`](https://github.com/JacobLinCool/cpta/commit/8d0aa520a5514069ae0b157328ef8630c7696065) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Support interactive evaluation
+
+-   [`30f2176`](https://github.com/JacobLinCool/cpta/commit/30f2176555aaca67bbcbea46f52a52a52e9e87ab) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Add execution timeout (10s)
+
 ## 0.0.1
 
 ### Patch Changes
