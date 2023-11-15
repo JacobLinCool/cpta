@@ -74,16 +74,15 @@ function hoist(contents: string[]) {
 function try_hoist(dir: string) {
 	const files = fs
 		.readdirSync(dir, { withFileTypes: true })
-		.filter(
-			(file) =>
-				!file.name.startsWith(".") && !file.name.startsWith("_") && file.isDirectory(),
-		);
+		.filter((file) => !file.name.startsWith(".") && !file.name.startsWith("_"));
 	if (files.length === 1) {
 		try_hoist(path.resolve(dir, files[0].name));
 		console.log(`Hoisting ${dir}`);
 		const fp = path.resolve(dir, files[0].name);
 		const stats = fs.statSync(fp);
+
 		if (stats.isDirectory()) {
+			console.group();
 			const inners = fs.readdirSync(fp);
 			for (const inner of inners) {
 				// check if the destination path already exists, and if it does, append a suffix
@@ -95,8 +94,10 @@ function try_hoist(dir: string) {
 					counter++;
 				}
 				fs.renameSync(path.resolve(fp, inner), safe_dest);
+				console.log(`Moved ${path.resolve(fp, inner)} to ${safe_dest}`);
 			}
 			fs.rmdirSync(fp);
+			console.groupEnd();
 		}
 	}
 }

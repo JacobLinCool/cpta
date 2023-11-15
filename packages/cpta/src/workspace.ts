@@ -156,32 +156,37 @@ export class Workspace {
 			const out = fs.createWriteStream(path.join(out_dir, "stdout.log"));
 			const err = fs.createWriteStream(path.join(out_dir, "stderr.log"));
 
-			for (const [command, stdin] of c.exec) {
-				const [exit, stdout, stderr] = await env.exec(command, stdin);
-				let exited = false;
-				exit.finally(() => (exited = true));
-
-				// timeout: 30s
-				const timeout = new Promise<"timeout" | null>((resolve) => {
-					setTimeout(async () => {
-						if (exited) {
-							resolve(null);
-						} else {
-							resolve("timeout");
-						}
-					}, 10 * 1000);
-				});
-
-				const code = await Promise.race([exit, timeout]);
-				if (code === "timeout") {
-					err.write(`Killed due to timeout.\n`);
+			for (const exec of c.exec) {
+				if ("exec" in exec) {
+					await exec.exec(path.join(this.dir, StageDir.Build), out_dir);
 				} else {
-					out.write(stdout.toString() + "\n");
+					const [command, stdin] = exec;
+					const [exit, stdout, stderr] = await env.exec(command, stdin);
+					let exited = false;
+					exit.finally(() => (exited = true));
 
-					if (code !== 0) {
-						err.write(`Received non-zero exit code: ${code}\n`);
+					// timeout: 30s
+					const timeout = new Promise<"timeout" | null>((resolve) => {
+						setTimeout(async () => {
+							if (exited) {
+								resolve(null);
+							} else {
+								resolve("timeout");
+							}
+						}, 10 * 1000);
+					});
+
+					const code = await Promise.race([exit, timeout]);
+					if (code === "timeout") {
+						err.write(`Killed due to timeout.\n`);
+					} else {
+						out.write(stdout.toString() + "\n");
+
+						if (code !== 0) {
+							err.write(`Received non-zero exit code: ${code}\n`);
+						}
+						err.write(stderr.toString() + "\n");
 					}
-					err.write(stderr.toString() + "\n");
 				}
 			}
 

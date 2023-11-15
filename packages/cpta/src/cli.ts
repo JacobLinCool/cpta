@@ -39,7 +39,7 @@ program
 		console.log("Build config directory:", options.build);
 		console.log("Workspace Filter:", options.filter);
 
-		const config = BuildConfig.from(options.build);
+		const config = BuildConfig.from(options.build) ?? new BuildConfig();
 		const workspaces = checkout(options.workspace, new RegExp(options.filter));
 
 		const failed = new Map<string, string>();

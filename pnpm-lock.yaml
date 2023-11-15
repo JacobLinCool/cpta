@@ -47,6 +47,14 @@ importers:
                 specifier: ^0.34.6
                 version: 0.34.6
 
+    examples/2023-fall/hw0203: {}
+
+    examples/2023-fall/hw0304: {}
+
+    examples/2023-fall/mid05: {}
+
+    examples/test-color: {}
+
     packages/cpta:
         dependencies:
             chalk:
