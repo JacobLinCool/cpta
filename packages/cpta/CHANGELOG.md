@@ -1,5 +1,11 @@
 # cpta
 
+## 0.1.1
+
+### Patch Changes
+
+-   [`3c71e1e`](https://github.com/JacobLinCool/cpta/commit/3c71e1ecbd3d87aaf9aa4ab99732265e4bbc6257) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Fix moodle archive directory hoisting
+
 ## 0.1.0
 
 ### Minor Changes
