@@ -35,7 +35,7 @@
 		"@types/debug": "^4.1.10",
 		"@types/dockerode": "^3.3.21",
 		"@types/tar": "^6.1.7",
-		"tsup": "^7.2.0",
+		"tsup": "^8.0.0",
 		"typedoc": "^0.25.2",
 		"typescript": "^5.2.2"
 	},
