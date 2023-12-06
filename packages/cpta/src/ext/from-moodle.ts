@@ -22,12 +22,19 @@ export async function from_moodle(archive: string, outdir: string) {
  * @returns An array of strings representing the names of the directories in the given path after renaming.
  */
 function remove_suffix(out: string) {
-	const regex = /_\d+_assignsubmission_file_/;
+	const regex = /_\d+_assignsubmission_file_[^.]*/;
 	const dirs = fs.readdirSync(out);
 	for (const dir of dirs) {
 		const p = path.resolve(out, dir);
-		if (dir.match(regex)) {
-			fs.renameSync(p, path.resolve(out, dir.replace(regex, "")));
+		const is_dir = fs.statSync(p).isDirectory();
+		if (is_dir) {
+			if (dir.match(regex)) {
+				fs.renameSync(p, path.resolve(out, dir.replace(regex, "")));
+			}
+		} else {
+			const d = path.resolve(out, path.basename(p, path.extname(p)));
+			fs.mkdirSync(d);
+			fs.renameSync(p, path.resolve(d, path.basename(p)));
 		}
 	}
 
