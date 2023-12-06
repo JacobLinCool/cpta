@@ -1,5 +1,11 @@
 # cpta
 
+## 0.1.2
+
+### Patch Changes
+
+-   [`d0ba84e`](https://github.com/JacobLinCool/cpta/commit/d0ba84eae01a82e74c33a55978129a423bd8dd84) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Fix moodle no sub dir pattern
+
 ## 0.1.1
 
 ### Patch Changes
