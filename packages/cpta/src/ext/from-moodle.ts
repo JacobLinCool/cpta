@@ -79,6 +79,9 @@ function hoist(contents: string[]) {
  * @param dir - The directory to attempt to hoist.
  */
 function try_hoist(dir: string) {
+	if (!fs.statSync(dir).isDirectory()) {
+		return;
+	}
 	const files = fs
 		.readdirSync(dir, { withFileTypes: true })
 		.filter((file) => !file.name.startsWith(".") && !file.name.startsWith("_"));
