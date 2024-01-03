@@ -106,7 +106,27 @@ export class Workspace {
 
 		try {
 			const [exit, stdout, stderr] = await env.exec(["make"]);
-			if (await exit) {
+			let exited = false;
+			exit.finally(() => (exited = true));
+			// timeout: 30s
+			let timer: NodeJS.Timeout | null = null;
+			const timeout = new Promise<"timeout" | null>((resolve) => {
+				timer = setTimeout(async () => {
+					if (exited) {
+						resolve(null);
+					} else {
+						resolve("timeout");
+					}
+				}, 30 * 1000);
+			});
+
+			const code = await Promise.race([exit, timeout]);
+			if (timer) {
+				clearTimeout(timer);
+			}
+			if (code === "timeout") {
+				throw new Error("Killed due to timeout.");
+			} else if (await exit) {
 				throw new Error(stderr.toString());
 			}
 		} finally {
@@ -166,17 +186,21 @@ export class Workspace {
 					exit.finally(() => (exited = true));
 
 					// timeout: 30s
+					let timer: NodeJS.Timeout | null = null;
 					const timeout = new Promise<"timeout" | null>((resolve) => {
-						setTimeout(async () => {
+						timer = setTimeout(async () => {
 							if (exited) {
 								resolve(null);
 							} else {
 								resolve("timeout");
 							}
-						}, 10 * 1000);
+						}, 30 * 1000);
 					});
 
 					const code = await Promise.race([exit, timeout]);
+					if (timer) {
+						clearTimeout(timer);
+					}
 					if (code === "timeout") {
 						err.write(`Killed due to timeout.\n`);
 					} else {
