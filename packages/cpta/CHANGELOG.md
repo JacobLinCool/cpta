@@ -1,5 +1,13 @@
 # cpta
 
+## 0.1.3
+
+### Patch Changes
+
+-   [`33ed9cb`](https://github.com/JacobLinCool/cpta/commit/33ed9cb6132a301146d99a961a4edce3ca1cfdaa) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Fix moodle unarchived directory hoisting bug
+
+-   [`c7aecd6`](https://github.com/JacobLinCool/cpta/commit/c7aecd6b73688a1d736aa380696af6ded1b175f1) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Make will now timed out after 30 seconds
+
 ## 0.1.2
 
 ### Patch Changes
