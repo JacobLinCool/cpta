@@ -22,7 +22,7 @@
 	},
 	"dependencies": {
 		"chalk": "^5.3.0",
-		"commander": "^11.1.0",
+		"commander": "^12.0.0",
 		"debug": "^4.3.4",
 		"dockerode": "^4.0.0",
 		"file-type": "^18.5.0",
