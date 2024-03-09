@@ -4,26 +4,26 @@
 	"author": "JacobLinCool <jacoblincool@gmail.com> (https://jacoblin.cool)",
 	"license": "AGPL-3.0",
 	"scripts": {
-		"prepare": "husky install",
+		"prepare": "husky",
 		"format": "prettier --write --ignore-path .gitignore **/*.{ts,json,yaml,yml}",
 		"test": "vitest",
 		"changeset": "changeset",
 		"build:docs": "typedoc --out docs"
 	},
 	"devDependencies": {
-		"@changesets/changelog-github": "^0.4.8",
-		"@changesets/cli": "^2.26.2",
-		"@types/node": "^20.8.9",
-		"husky": "^8.0.3",
-		"lint-staged": "^15.0.2",
-		"prettier": "^3.0.3",
-		"prettier-plugin-organize-imports": "^3.2.3",
+		"@changesets/changelog-github": "^0.5.0",
+		"@changesets/cli": "^2.27.1",
+		"@types/node": "^20.11.25",
+		"husky": "^9.0.11",
+		"lint-staged": "^15.2.2",
+		"prettier": "^3.2.5",
+		"prettier-plugin-organize-imports": "^3.2.4",
 		"serve": "^14.2.1",
-		"tsup": "^7.2.0",
-		"tsx": "^3.14.0",
-		"typedoc": "^0.25.2",
-		"typescript": "^5.2.2",
-		"vitest": "^0.34.6"
+		"tsup": "^8.0.2",
+		"tsx": "^4.7.1",
+		"typedoc": "^0.25.11",
+		"typescript": "^5.4.2",
+		"vitest": "^1.3.1"
 	},
 	"lint-staged": {
 		"*.{ts,js,json,yaml,yml}": [
@@ -38,5 +38,5 @@
 		"url": "https://github.com/JacobLinCool/cpta/issues"
 	},
 	"homepage": "https://jacoblincool.github.io/cpta",
-	"packageManager": "pnpm@8.10.0"
+	"packageManager": "pnpm@8.15.4"
 }

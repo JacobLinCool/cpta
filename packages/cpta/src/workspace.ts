@@ -228,7 +228,7 @@ export class Workspace {
 	 * @throws If the workspace is not ready for evaluation. See {@link StageError}.
 	 * @returns A Promise that resolves to a tuple containing a boolean indicating whether the test passed and a message describing the result.
 	 */
-	public async eval(c: Case, {} = {}): Promise<[passed: boolean, message: string]> {
+	public async eval(c: Case): Promise<[passed: boolean, message: string]> {
 		if (this.stage() < Stage.Output) {
 			throw new StageError("stage is not ready for eval");
 		}
