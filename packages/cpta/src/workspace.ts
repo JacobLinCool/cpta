@@ -105,7 +105,7 @@ export class Workspace {
 		});
 
 		try {
-			const [exit, stdout, stderr] = await env.exec(["make"]);
+			const [exit, stdout, stderr] = await env.exec(["make"], undefined, config?.env());
 			let exited = false;
 			exit.finally(() => (exited = true));
 			// timeout: 30s

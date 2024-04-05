@@ -91,6 +91,7 @@ export class Environment {
 	public async exec(
 		cmd: string[],
 		stdin?: string,
+		env?: string[],
 	): Promise<[exit: Promise<number | null>, stdout: WritableStream, stderr: WritableStream]> {
 		log("exec", cmd);
 		const exec = await this.container.exec({
@@ -98,6 +99,7 @@ export class Environment {
 			AttachStdout: true,
 			AttachStderr: true,
 			AttachStdin: stdin ? true : false,
+			Env: env,
 		});
 
 		const duplex = await exec.start({
@@ -149,8 +151,8 @@ export class Environment {
 		const restores = Array.isArray(opt.restore)
 			? opt.restore
 			: typeof opt.restore === "string"
-			? [opt.restore]
-			: [];
+				? [opt.restore]
+				: [];
 		for (let i = 0; i < restores.length; i++) {
 			const restore = restores[i];
 			if (!fs.existsSync(restore)) {

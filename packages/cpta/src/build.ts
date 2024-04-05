@@ -1,3 +1,4 @@
+import { parse } from "dotenv";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -15,6 +16,21 @@ export class BuildConfig {
 		}
 
 		return mountpoint;
+	}
+
+	public env(): string[] {
+		if (!this.dir) {
+			return [];
+		}
+
+		const env = path.join(this.dir, ".env");
+		if (!fs.existsSync(env)) {
+			return [];
+		}
+
+		const data = fs.readFileSync(env, "utf8");
+		const parsed = parse(data);
+		return Object.entries(parsed).map(([key, value]) => `${key}=${value}`);
 	}
 
 	static from(dir: string): BuildConfig | null {

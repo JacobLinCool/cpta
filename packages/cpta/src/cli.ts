@@ -40,6 +40,14 @@ program
 		console.log("Workspace Filter:", options.filter);
 
 		const config = BuildConfig.from(options.build) ?? new BuildConfig();
+		const env = config.env();
+		if (env.length) {
+			console.log("Environment Variables:");
+			console.group();
+			env.forEach((e) => console.log(e));
+			console.groupEnd();
+		}
+
 		const workspaces = checkout(options.workspace, new RegExp(options.filter));
 
 		const failed = new Map<string, string>();
